@@ -1,0 +1,183 @@
+#!/bin/bash
+
+function usage() {
+  exit_code=1
+
+  if [[ "$1" == [0-9] ]]; then
+    exit_code="$1"
+    shift
+  fi
+
+  if [ -n "$1" ]; then
+    echo "$*" >&2
+  fi
+
+  cat <<EOF >&2
+Usage: $(basename $0) <TYPE> [SERVICE [SERVICE ...]]
+
+Types:
+  rails
+  symfony
+  typo3
+  wordpress
+
+Services:
+  memcached
+  redis
+  elasticsearch
+  mysql
+  pgsql
+  mongodb
+EOF
+
+  exit "$exit_code"
+}
+
+function parse() {
+  TYPE=none
+  MEMCACHED=0
+  REDIS=0
+  ELASTICSEARCH=0
+  MYSQL=0
+  PGSQL=0
+  MONGODB=0
+
+  while [ $# -gt 0 ]
+  do
+    case "$1" in
+      "rails" | "symfony" | "typo3" | "wordpress")
+        TYPE=$1
+        shift
+        ;;
+      "memcached")
+        MEMCACHED=1
+        shift
+        ;;
+      "redis")
+        REDIS=1
+        shift
+        ;;
+      "elasticsearch")
+        ELASTICSEARCH=1
+        shift
+        ;;
+      "mysql")
+        MYSQL=1
+        shift
+        ;;
+      "pgsql")
+        PGSQL=1
+        shift
+        ;;
+      "mongodb")
+        MONGODB=1
+        shift
+        ;;
+      *)
+        usage 1 "Unknown option ´$1´, please use only known options!"
+        ;;
+    esac
+  done
+
+  if [ "$TYPE" == "none" ]
+  then
+    usage 1 "You have to define one of the available types"
+  fi
+}
+
+function activate_type() {
+  echo "Activating ${TYPE} application!"
+  ln -sf <%= @config_dir %>/${TYPE}.conf <%= node["nginx"]["apps_dir"] %>/default.conf
+}
+
+function activate_memcached() {
+  if [ $MEMCACHED -eq 1 ]
+  then
+    <%= @create_service % node["memcached"]["service_name"] %>
+    <%= @start_service % node["memcached"]["service_name"] %>
+  else
+    <%= @stop_service % node["memcached"]["service_name"] %>
+    <%= @remove_service % node["memcached"]["service_name"] %>
+  fi
+
+  return $?
+}
+
+function activate_redis() {
+  if [ $REDIS -eq 1 ]
+  then
+    <%= @create_service % node["redis"]["service_name"] %>
+    <%= @start_service % node["redis"]["service_name"] %>
+  else
+    <%= @stop_service % node["redis"]["service_name"] %>
+    <%= @remove_service % node["redis"]["service_name"] %>
+  fi
+
+  return $?
+}
+
+function activate_elasticsearch() {
+  if [ $REDIS -eq 1 ]
+  then
+    <%= @create_service % node["elasticsearch"]["service_name"] %>
+    <%= @start_service % node["elasticsearch"]["service_name"] %>
+  else
+    <%= @stop_service % node["elasticsearch"]["service_name"] %>
+    <%= @remove_service % node["elasticsearch"]["service_name"] %>
+  fi
+
+  return $?
+}
+
+function activate_mysql() {
+  if [ $MYSQL -eq 1 ]
+  then
+    <%= @create_service % node["mysql"]["server"]["service_name"] %>
+    <%= @start_service % node["mysql"]["server"]["service_name"] %>
+  else
+    <%= @stop_service % node["mysql"]["server"]["service_name"] %>
+    <%= @remove_service % node["mysql"]["server"]["service_name"] %>
+  fi
+
+  return $?
+}
+
+function activate_pgsql() {
+  if [ $PGSQL -eq 1 ]
+  then
+    <%= @create_service % node["postgresql"]["server"]["service_name"] %>
+    <%= @start_service % node["postgresql"]["server"]["service_name"] %>
+  else
+    <%= @stop_service % node["postgresql"]["server"]["service_name"] %>
+    <%= @remove_service % node["postgresql"]["server"]["service_name"] %>
+  fi
+
+  return 1
+}
+
+function activate_mongodb() {
+  if [ $MONGODB -eq 1 ]
+  then
+    <%= @create_service % node["mongodb"]["server"]["service_name"] %>
+    <%= @start_service % node["mongodb"]["server"]["service_name"] %>
+  else
+    <%= @stop_service % node["mongodb"]["server"]["service_name"] %>
+    <%= @remove_service % node["mongodb"]["server"]["service_name"] %>
+  fi
+
+  return 1
+}
+
+function main() {
+  parse "$@"
+
+  activate_type
+  activate_memcached
+  activate_redis
+  activate_elasticsearch
+  activate_mysql
+  activate_pgsql
+  activate_mongodb
+}
+
+main "$@"
