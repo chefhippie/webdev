@@ -21,26 +21,36 @@ default["webdev"]["create_service"] = value_for_platform_family(
   ["debian", "ubuntu"] => "update-rc.d %s defaults",
   ["suse"] => "insserv -df %s"
 )
+
 default["webdev"]["remove_service"] = value_for_platform_family(
   ["debian", "ubuntu"] => "update-rc.d -f %s remove",
   ["suse"] => "insserv -rf %s"
 )
+
 default["webdev"]["start_service"] = value_for_platform_family(
   ["debian", "ubuntu"] => "service %s start",
   ["suse"] => "systemctl start %s.service"
 )
+
 default["webdev"]["stop_service"] = value_for_platform_family(
   ["debian", "ubuntu"] => "service %s stop",
   ["suse"] => "systemctl stop %s.service"
 )
-default["webdev"]["database"]["database"] = "webdev"
-default["webdev"]["database"]["username"] = "webdev"
-default["webdev"]["database"]["password"] = "webdev"
-default["webdev"]["executable"] = "/usr/local/sbin/webdev"
-default["webdev"]["config_dir"] = "/etc/nginx/templates"
+
+default["webdev"]["castles"] = {
+  "tboerger-base" => "tboerger/homeshick-base",
+  "tboerger-linux" => "tboerger/homeshick-linux"
+}
+
 default["webdev"]["config_files"] = %w(
   rails.conf
   symfony.conf
   typo3.conf
   wordpress.conf
 )
+
+default["webdev"]["config_dir"] = "/etc/nginx/templates"
+default["webdev"]["executable"] = "/usr/local/sbin/webdev"
+default["webdev"]["database"]["database"] = "webdev"
+default["webdev"]["database"]["username"] = "webdev"
+default["webdev"]["database"]["password"] = "webdev"

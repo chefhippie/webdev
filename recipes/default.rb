@@ -26,6 +26,7 @@ include_recipe "mongodb"
 include_recipe "memcached"
 include_recipe "elasticsearch"
 include_recipe "redis"
+include_recipe "homeshick"
 
 directory node["webdev"]["config_dir"] do
   owner "root"
@@ -79,4 +80,17 @@ mongodb_app node["webdev"]["database"]["database"] do
   password node["webdev"]["database"]["password"]
 
   action :create
+end
+
+%w(
+  root
+  vagrant
+).each do |name|
+  homeshick name do
+    keys node["webdev"]["castles"]
+
+    only_if do
+      node["webdev"]["castles"]
+    end
+  end
 end
