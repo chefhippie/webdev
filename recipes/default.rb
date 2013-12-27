@@ -23,9 +23,9 @@ include_recipe "ruby"
 include_recipe "mysql"
 include_recipe "postgresql"
 include_recipe "mongodb"
-include_recipe "redis"
 include_recipe "memcached"
 include_recipe "elasticsearch"
+include_recipe "redis"
 
 directory node["webdev"]["config_dir"] do
   owner "root"
