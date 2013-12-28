@@ -93,79 +93,103 @@ function activate_type() {
 function activate_memcached() {
   if [ $MEMCACHED -eq 1 ]
   then
-    <%= @create_service % node["memcached"]["service_name"] %>
-    <%= @start_service % node["memcached"]["service_name"] %>
+    echo "Starting memcached..."
+    <%= @create_service % node["memcached"]["service_name"] %> > /var/log/webdev.log 2>&1 
+    <%= @start_service % node["memcached"]["service_name"] %> > /var/log/webdev.log 2>&1
+    ret=$?
   else
-    <%= @stop_service % node["memcached"]["service_name"] %>
-    <%= @remove_service % node["memcached"]["service_name"] %>
+    echo "Stopping memcached..."
+    <%= @stop_service % node["memcached"]["service_name"] %> > /var/log/webdev.log 2>&1
+    ret=$?
+    <%= @remove_service % node["memcached"]["service_name"] %> > /var/log/webdev.log 2>&1
   fi
 
-  return $?
+  return $ret
 }
 
 function activate_redis() {
   if [ $REDIS -eq 1 ]
   then
-    <%= @create_service % node["redis"]["service_name"] %>
-    <%= @start_service % node["redis"]["service_name"] %>
+    echo "Starting redis..."
+    <%= @create_service % node["redis"]["service_name"] %> > /var/log/webdev.log 2>&1
+    <%= @start_service % node["redis"]["service_name"] %> > /var/log/webdev.log 2>&1
+    ret=$?
   else
-    <%= @stop_service % node["redis"]["service_name"] %>
-    <%= @remove_service % node["redis"]["service_name"] %>
+    echo "Stopping redis..."
+    <%= @stop_service % node["redis"]["service_name"] %> > /var/log/webdev.log 2>&1
+    ret=$?
+    <%= @remove_service % node["redis"]["service_name"] %> > /var/log/webdev.log 2>&1
   fi
 
-  return $?
+  return $ret
 }
 
 function activate_elasticsearch() {
-  if [ $REDIS -eq 1 ]
+  if [ $ELASTICSEARCH -eq 1 ]
   then
-    <%= @create_service % node["elasticsearch"]["service_name"] %>
-    <%= @start_service % node["elasticsearch"]["service_name"] %>
+    echo "Starting elasticsearch..."
+    <%= @create_service % node["elasticsearch"]["service_name"] %> > /var/log/webdev.log 2>&1
+    <%= @start_service % node["elasticsearch"]["service_name"] %> > /var/log/webdev.log 2>&1
+    ret=$?
   else
-    <%= @stop_service % node["elasticsearch"]["service_name"] %>
-    <%= @remove_service % node["elasticsearch"]["service_name"] %>
+    echo "Stopping elasticsearch..."
+    <%= @stop_service % node["elasticsearch"]["service_name"] %> > /var/log/webdev.log 2>&1
+    ret=$?
+    <%= @remove_service % node["elasticsearch"]["service_name"] %> > /var/log/webdev.log 2>&1
   fi
 
-  return $?
+  return $ret
 }
 
 function activate_mysql() {
   if [ $MYSQL -eq 1 ]
   then
-    <%= @create_service % node["mysql"]["server"]["service_name"] %>
-    <%= @start_service % node["mysql"]["server"]["service_name"] %>
+    echo "Starting mysql..."
+    <%= @create_service % node["mysql"]["server"]["service_name"] %> > /var/log/webdev.log 2>&1
+    <%= @start_service % node["mysql"]["server"]["service_name"] %> > /var/log/webdev.log 2>&1
+    ret=$?
   else
-    <%= @stop_service % node["mysql"]["server"]["service_name"] %>
-    <%= @remove_service % node["mysql"]["server"]["service_name"] %>
+    echo "Stopping mysql..."
+    <%= @stop_service % node["mysql"]["server"]["service_name"] %> > /var/log/webdev.log 2>&1
+    ret=$?
+    <%= @remove_service % node["mysql"]["server"]["service_name"] %> > /var/log/webdev.log 2>&1
   fi
 
-  return $?
+  return $ret
 }
 
 function activate_pgsql() {
   if [ $PGSQL -eq 1 ]
   then
-    <%= @create_service % node["postgresql"]["server"]["service_name"] %>
-    <%= @start_service % node["postgresql"]["server"]["service_name"] %>
+    echo "Starting postgresql..."
+    <%= @create_service % node["postgresql"]["server"]["service_name"] %> > /var/log/webdev.log 2>&1
+    <%= @start_service % node["postgresql"]["server"]["service_name"] %> > /var/log/webdev.log 2>&1
+    ret=$?
   else
-    <%= @stop_service % node["postgresql"]["server"]["service_name"] %>
-    <%= @remove_service % node["postgresql"]["server"]["service_name"] %>
+    echo "Stopping postgresql..."
+    <%= @stop_service % node["postgresql"]["server"]["service_name"] %> > /var/log/webdev.log 2>&1
+    ret=$?
+    <%= @remove_service % node["postgresql"]["server"]["service_name"] %> > /var/log/webdev.log 2>&1
   fi
 
-  return 1
+  return $ret
 }
 
 function activate_mongodb() {
   if [ $MONGODB -eq 1 ]
   then
+    echo "Starting mongodb..."
     <%= @create_service % node["mongodb"]["server"]["service_name"] %>
     <%= @start_service % node["mongodb"]["server"]["service_name"] %>
+    ret=$?
   else
+    echo "Stopping mongodb..."
     <%= @stop_service % node["mongodb"]["server"]["service_name"] %>
+    ret=$?
     <%= @remove_service % node["mongodb"]["server"]["service_name"] %>
   fi
 
-  return 1
+  return $ret
 }
 
 function main() {
