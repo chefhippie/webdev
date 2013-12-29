@@ -179,14 +179,14 @@ function activate_mongodb() {
   if [ $MONGODB -eq 1 ]
   then
     echo "Starting mongodb..."
-    <%= @create_service % node["mongodb"]["server"]["service_name"] %>
-    <%= @start_service % node["mongodb"]["server"]["service_name"] %>
+    <%= @create_service % node["mongodb"]["server"]["service_name"] %> > /var/log/webdev.log 2>&1
+    <%= @start_service % node["mongodb"]["server"]["service_name"] %> > /var/log/webdev.log 2>&1
     ret=$?
   else
     echo "Stopping mongodb..."
-    <%= @stop_service % node["mongodb"]["server"]["service_name"] %>
+    <%= @stop_service % node["mongodb"]["server"]["service_name"] %> > /var/log/webdev.log 2>&1
     ret=$?
-    <%= @remove_service % node["mongodb"]["server"]["service_name"] %>
+    <%= @remove_service % node["mongodb"]["server"]["service_name"] %> > /var/log/webdev.log 2>&1
   fi
 
   return $ret
