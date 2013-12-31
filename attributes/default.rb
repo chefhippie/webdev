@@ -37,6 +37,11 @@ default["webdev"]["stop_service"] = value_for_platform_family(
   ["suse"] => "systemctl stop %s.service"
 )
 
+default["webdev"]["restart_service"] = value_for_platform_family(
+  ["debian", "ubuntu"] => "service %s restart",
+  ["suse"] => "systemctl restart %s.service"
+)
+
 default["webdev"]["castles"] = {
   "tboerger-base" => "tboerger/homeshick-base",
   "tboerger-linux" => "tboerger/homeshick-linux"

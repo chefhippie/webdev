@@ -87,7 +87,9 @@ function parse() {
 
 function activate_type() {
   echo "Activating ${TYPE} application!"
+
   ln -sf <%= @config_dir %>/${TYPE}.conf <%= node["nginx"]["apps_dir"] %>/default.conf
+  <%= @restart_service % node["nginx"]["service_name"] %> > /var/log/webdev.log 2>&1 
 }
 
 function activate_memcached() {
