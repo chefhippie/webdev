@@ -69,12 +69,16 @@ mysql_app node["webdev"]["database"]["database"] do
   username node["webdev"]["database"]["username"]
   password node["webdev"]["database"]["password"]
 
+  connection node["mysql"]["credentials"]
+
   action :create
 end
 
 postgresql_app node["webdev"]["database"]["database"] do
   username node["webdev"]["database"]["username"]
   password node["webdev"]["database"]["password"]
+
+  connection node["postgresql"]["credentials"]
 
   action :create
 end
