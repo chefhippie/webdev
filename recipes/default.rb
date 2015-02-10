@@ -27,10 +27,7 @@ include_recipe "memcached"
 include_recipe "elasticsearch"
 include_recipe "redis"
 include_recipe "homeshick"
-
-gem_package "bundler" do
-  action :install
-end
+include_recipe "bundler"
 
 directory node["webdev"]["config_dir"] do
   owner "root"

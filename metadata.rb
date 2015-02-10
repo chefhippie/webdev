@@ -14,6 +14,7 @@ depends "mongodb"
 depends "memcached"
 depends "elasticsearch"
 depends "redis"
+depends "bundler"
 recipe "webdev", "Installs/Configures webdev"
 
 supports "suse", ">= 12.3"

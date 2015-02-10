@@ -18,33 +18,32 @@
 #
 
 default["webdev"]["create_service"] = value_for_platform_family(
-  ["debian", "ubuntu"] => "update-rc.d %s defaults",
-  ["suse"] => "insserv -df %s"
+  ["debian"] => "update-rc.d %s defaults",
+  ["suse"] => "systemctl enable %s.service"
 )
 
 default["webdev"]["remove_service"] = value_for_platform_family(
-  ["debian", "ubuntu"] => "update-rc.d -f %s remove",
-  ["suse"] => "insserv -rf %s"
+  ["debian"] => "update-rc.d -f %s remove",
+  ["suse"] => "systemctl disable %s.service"
 )
 
 default["webdev"]["start_service"] = value_for_platform_family(
-  ["debian", "ubuntu"] => "service %s start",
+  ["debian"] => "service %s start",
   ["suse"] => "systemctl start %s.service"
 )
 
 default["webdev"]["stop_service"] = value_for_platform_family(
-  ["debian", "ubuntu"] => "service %s stop",
+  ["debian"] => "service %s stop",
   ["suse"] => "systemctl stop %s.service"
 )
 
 default["webdev"]["restart_service"] = value_for_platform_family(
-  ["debian", "ubuntu"] => "service %s restart",
+  ["debian"] => "service %s restart",
   ["suse"] => "systemctl restart %s.service"
 )
 
 default["webdev"]["castles"] = {
-  "tboerger-base" => "tboerger/homeshick-base",
-  "tboerger-linux" => "tboerger/homeshick-linux"
+
 }
 
 default["webdev"]["config_files"] = %w(
